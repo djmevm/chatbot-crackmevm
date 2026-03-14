@@ -1,0 +1,63 @@
+# ============================================================
+# .gitignore - Crack MEVM Chatbot
+# ============================================================
+
+# Entorno virtual Python
+venv/
+env/
+.env/
+.venv/
+
+# Modelos entrenados
+models/
+*.tar.gz
+
+# Caché de Rasa
+.rasa/
+
+# Archivos Python compilados
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+
+# Archivos del venv que se colaron
+pyvenv.cfg
+*.exe
+jp.py
+
+# Excel con historial (datos privados)
+historial_citas.xlsx
+
+# Carpeta duplicada interna
+chatbot_crackmevm/
+
+# Git interno
+.git/
+*.sample
+COMMIT_EDITMSG
+HEAD
+config
+description
+index
+master
+
+# Logs
+*.log
+logs/
+
+# Variables de entorno
+.env
+.env.local
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# macOS
+.DS_Store

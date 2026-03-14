@@ -1,0 +1,104 @@
+# ============================================================
+# CONFIG - Crack MEVM Soluciones Informáticas
+# Configuración del pipeline NLU y políticas
+# ============================================================
+
+# ============================================================
+# PIPELINE DE NLU
+# ============================================================
+# Procesa el texto de entrada para extraer intents y entities
+
+language: es
+
+pipeline:
+  # 1. Tokenizador - Divide el texto en palabras/tokens
+- name: WhitespaceTokenizer
+
+  # 2. Featurizador de conteo - Crea vectores de características
+- name: RegexFeaturizer
+
+  # 3. Featurizador léxico - Reconoce entidades basadas en listas
+- name: LexicalSyntacticFeaturizer
+
+  # 4. Featurizador de conteo - Representación numérica del texto
+- name: CountVectorsFeaturizer
+
+  # 5. Featurizador de conteo para caracteres - Captura patrones
+- name: CountVectorsFeaturizer
+  analyzer: char_wb
+  min_ngram: 1
+  max_ngram: 4
+
+  # 6. Clasificador de intents - DIET (Dual Intent and Entity Transformer)
+- name: DIETClassifier
+  epochs: 100
+  constrain_similarities: true
+
+  # 7. Extractor de entidades basado en expresiones regulares
+- name: RegexEntityExtractor
+
+  # 8. Selector de respuestas fallback
+- name: FallbackClassifier
+  threshold: 0.3
+  ambiguity_threshold: 0.1
+
+# ============================================================
+# POLÍTICAS
+# ============================================================
+# Determinan qué acción tomar en cada paso de la conversación
+
+policies:
+  # 1. MemoizationPolicy - Recuerda historias exactas
+- name: MemoizationPolicy
+
+  # 2. RulePolicy - Ejecuta reglas definidas
+- name: RulePolicy
+  core_fallback_threshold: 0.3
+  core_fallback_action_name: "action_default_fallback"
+  enable_fallback_prediction: true
+
+  # 3. TEDPolicy - Aprende de historias para predecir acciones
+- name: TEDPolicy
+  max_history: 5
+  epochs: 100
+  constrain_similarities: true
+
+  # 4. FormPolicy - Maneja formularios (obsoleto en Rasa 3.x, incluido en RulePolicy)
+  # No se necesita explícitamente en Rasa 3.x+
+
+# ============================================================
+# CONFIGURACIÓN DEL SERVIDOR DE ACCIONES
+# ============================================================
+# Como no usamos actions personalizadas, esto es opcional
+
+# action_endpoint:
+#   url: "http://localhost:5055/webhook"
+
+# ============================================================
+# CONFIGURACIÓN DE LA BASE DE DATOS
+# ============================================================
+# Tracker store para guardar conversaciones
+
+# tracker_store:
+#   type: SQL
+#   dialect: sqlite
+#   url: sqlite:///rasa.db
+
+# ============================================================
+# CONFIGURACIÓN DE LOGS
+# ============================================================
+
+# logging:
+#   version: 1
+#   disable_existing_loggers: false
+#   handlers:
+#     console:
+#       class: logging.StreamHandler
+#       level: DEBUG
+#       formatter: detailed
+#   loggers:
+#     rasa:
+#       level: DEBUG
+#       handlers: [console]
+#       propagate: false
+assistant_id: 20260312-132757-numerous-cue

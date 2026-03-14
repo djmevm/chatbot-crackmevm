@@ -1,0 +1,251 @@
+version: "3.1"
+
+# ============================================================
+# DOMAIN - Crack MEVM Soluciones Informáticas
+# Chatbot para agendar servicios de soporte técnico
+# ============================================================
+
+intents:
+  - saludo
+  - despedida
+  - afirmacion
+  - negacion
+  - solicitar_servicio
+  - informar_servicio
+  - informar_fecha
+  - informar_hora
+  - informar_telefono
+  - informar_nombre
+  - informar_especificacion
+  - consultar_servicios
+  - consultar_precios
+  - cancelar
+  - fuera_de_contexto
+  - agradecimiento
+
+entities:
+  - servicio
+  - fecha
+  - hora
+  - telefono
+  - nombre
+  - especificacion
+
+slots:
+  servicio:
+    type: categorical
+    values:
+      - mantenimiento
+      - formateo
+      - instalacion_redes
+      - reparacion
+      - actualizacion
+      - limpieza_virus
+      - recuperacion_datos
+    mappings:
+      - type: from_entity
+        entity: servicio
+      - type: from_text
+        conditions:
+          - active_loop: formulario_agendar
+            requested_slot: servicio
+    influence_conversation: true
+
+  fecha:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: fecha
+      - type: from_text
+        conditions:
+          - active_loop: formulario_agendar
+            requested_slot: fecha
+    influence_conversation: true
+
+  hora:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: hora
+      - type: from_text
+        conditions:
+          - active_loop: formulario_agendar
+            requested_slot: hora
+    influence_conversation: true
+
+  telefono:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: telefono
+      - type: from_text
+        conditions:
+          - active_loop: formulario_agendar
+            requested_slot: telefono
+    influence_conversation: true
+
+  nombre:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: nombre
+      - type: from_text
+        conditions:
+          - active_loop: formulario_agendar
+            requested_slot: nombre
+    influence_conversation: true
+
+  especificacion:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: especificacion
+      - type: from_text
+        conditions:
+          - active_loop: formulario_agendar
+            requested_slot: especificacion
+    influence_conversation: false
+
+forms:
+  formulario_agendar:
+    required_slots:
+      - nombre
+      - servicio
+      - fecha
+      - hora
+      - telefono
+      - especificacion
+
+responses:
+  # Saludos y bienvenida
+  utter_saludo:
+    - text: "¡Hola! 👋 Bienvenido a **Crack MEVM Soluciones Informáticas**."
+    - text: "¡Buen día! 😊 Soy el asistente virtual de **Crack MEVM**."
+    - text: "¡Hola! Soy el bot de **Crack MEVM Soluciones Informáticas**. ¿En qué puedo ayudarte?"
+
+  utter_presentacion:
+    - text: |
+        💻 **¿Qué hacemos?**
+        
+        • 🔧 **Mantenimiento** de computadoras y laptops
+        • 💾 **Formateo** e instalación de sistemas operativos
+        • 🌐 **Instalación de redes** (cableadas e inalámbricas)
+        • 🛠️ **Reparación** de hardware y software
+        • 🔄 **Actualización** de componentes
+        • 🦠 **Limpieza de virus** y malware
+        • 💿 **Recuperación de datos**
+        
+        ¿Te gustaría agendar un servicio? Solo dime **"quiero agendar"** o **"solicitar servicio"**.
+
+  # Despedida
+  utter_despedida:
+    - text: "¡Gracias por contactar a **Crack MEVM**! 🙌 Que tengas un excelente día."
+    - text: "¡Hasta luego! 👋 Recuerda que **Crack MEVM** siempre está aquí para ayudarte."
+    - text: "¡Adiós! 🖐️ No dudes en volver si necesitas más ayuda con tus equipos."
+
+  # Agradecimiento
+  utter_agradecimiento:
+    - text: "¡De nada! 😊 Estamos para servirte."
+    - text: "¡Con gusto! 🙌 ¿Hay algo más en lo que pueda ayudarte?"
+    - text: "No hay de qué. 💪 **Crack MEVM** a tu servicio."
+
+  # Información de servicios
+  utter_servicios_disponibles:
+    - text: |
+        📋 **Servicios que ofrecemos en Crack MEVM:**
+        
+        🔧 **Mantenimiento** - Limpieza interna, cambio de pasta térmica, optimización
+        💾 **Formateo** - Instalación de Windows/Linux, respaldo de información
+        🌐 **Instalación de Redes** - Configuración de routers, cableado estructurado, WiFi
+        🛠️ **Reparación** - Diagnóstico y solución de fallas
+        🔄 **Actualización** - Mejora de RAM, disco SSD, tarjeta gráfica
+        🦠 **Limpieza de Virus** - Eliminación de malware, antivirus
+        💿 **Recuperación de Datos** - Rescate de archivos borrados o dañados
+        
+        ¿Cuál servicio necesitas? Dime el nombre y comenzamos con tu agenda.
+
+  utter_precios:
+    - text: |
+        💰 **Tarifas aproximadas de Crack MEVM:**
+        
+        🔧 Mantenimiento preventivo: **$300 - $500 MXN**
+        💾 Formateo con respaldo: **$400 - $600 MXN**
+        🌐 Instalación de red (por punto): **$350 - $800 MXN**
+        🛠️ Diagnóstico y reparación: **$250 - $1500 MXN** (según complejidad)
+        🔄 Actualización de componentes: **Costo de pieza + $200 MXN** instalación
+        🦠 Limpieza de virus: **$350 - $500 MXN**
+        💿 Recuperación de datos: **$500 - $2000 MXN** (según cantidad)
+        
+        ⚠️ *Los precios pueden variar según el caso específico.*
+        
+        ¿Deseas agendar una cita para cotizar tu servicio?
+
+  # Formulario - Preguntas para cada slot
+  utter_ask_nombre:
+    - text: "👤 ¿Cuál es tu nombre o el nombre de tu empresa?"
+    - text: "Por favor, dime tu nombre para personalizar tu cita. 😊"
+
+  utter_ask_servicio:
+    - text: "¿Qué servicio necesitas? 🔧\n\nOpciones: mantenimiento, formateo, instalación de redes, reparación, limpieza de virus, recuperación de datos o actualización."
+    - text: "Cuéntame, ¿qué tipo de servicio requieres? 💻\n(mantenimiento, formateo, redes, etc.)"
+
+  utter_ask_fecha:
+    - text: "📅 ¿Para qué fecha necesitas el servicio?\n(Puedes decir: hoy, mañana, el lunes, 15 de marzo, etc.)"
+    - text: "¿Qué día te gustaría agendar? 📆"
+
+  utter_ask_hora:
+    - text: "⏰ ¿A qué hora podemos atenderte?\n(Ejemplo: 10 de la mañana, 3 pm, 16:30)"
+    - text: "¿En qué horario te queda mejor? 🕐"
+
+  utter_ask_telefono:
+    - text: "📱 ¿Cuál es tu número de celular para contactarte?"
+    - text: "Por favor, compártenos tu número telefónico para confirmar tu cita. 📞"
+
+  utter_ask_especificacion:
+    - text: "📝 ¿Nos puedes dar más detalles sobre el servicio?\n(Problema específico, marca de equipo, modelo, etc.)"
+    - text: "Cuéntanos un poco más sobre lo que necesitas para prepararnos mejor. 💬"
+
+  # Confirmación de cita
+  utter_cita_confirmada:
+    - text: |
+        ✅ **¡CITA AGENDADA EXITOSAMENTE!**
+        
+        📋 **Resumen de tu solicitud:**
+        
+        👤 **Nombre:** {nombre}
+        🔹 **Servicio:** {servicio}
+        📅 **Fecha:** {fecha}
+        ⏰ **Hora:** {hora}
+        📱 **Teléfono:** {telefono}
+        📝 **Detalles:** {especificacion}
+        
+        Un técnico de **Crack MEVM** se pondrá en contacto contigo para confirmar.
+        
+        ¡Gracias por confiar en nosotros! 💪
+
+  utter_cita_cancelada:
+    - text: "❌ Entendido, he cancelado el proceso de agendamiento.\n\n¿Hay algo más en lo que pueda ayudarte?"
+    - text: "Ok, cancelé la solicitud. 😊 ¿Necesitas algo más?"
+
+  utter_continuar:
+    - text: "Perfecto, continuemos. 👍"
+    - text: "Vale, sigamos. ✅"
+
+  utter_fuera_de_contexto:
+    - text: "Lo siento, no entendí muy bien. 🤔\n\nPuedo ayudarte a:\n• 📅 Agendar un servicio\n• 📋 Ver los servicios disponibles\n• 💰 Consultar precios\n\n¿Qué necesitas?"
+    - text: "Disculpa, no comprendí. 😅\n\nIntenta decirme:\n• 'Quiero agendar un servicio'\n• '¿Qué servicios ofrecen?'\n• '¿Cuánto cuesta el formateo?'"
+
+  utter_default:
+    - text: "No estoy seguro de entender. ¿Podrías reformular tu pregunta?"
+    - text: "Disculpa, ¿podrías ser más específico?"
+
+  utter_proporcionar_ayuda:
+    - text: "¿En qué más puedo ayudarte? 🤔"
+    - text: "¿Necesitas algo más? 💬"
+
+actions:
+  - action_save_appointment
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: false
